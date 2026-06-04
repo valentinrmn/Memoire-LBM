@@ -1,6 +1,6 @@
-PWD d:\valen\Documents\LaTeX\M2\Mémoire\Consistance
+PWD d:\valen\Documents\Projects\M2\Memoire-LBM\pdf\d2q4-consistance-non-final
 INPUT C:\Users\valen\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT d:\valen\Documents\LaTeX\M2\Mémoire\Consistance\main.tex
+INPUT d:\valen\Documents\Projects\M2\Memoire-LBM\pdf\d2q4-consistance-non-final\main.tex
 OUTPUT main.log
 INPUT C:\Users\valen\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\valen\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls

@@ -27,7 +27,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{Mémoire M2}
-\chead{Consistance $D_1Q_4$ }
+\chead{Consistance $D_2Q_4$ }
 \lhead{Valentin Roman}
 \rfoot{Page \thepage}
 
@@ -61,7 +61,7 @@ M =
     1 & -1 & 1 & -1\\
 \end{pmatrix}
 \]
-et on choisit comme équilibres des moments non conservés $m_i^\text{eq} (m_0) = \alpha_i m_0$, $\alpha_i \in \mathbb{R}$. On note $s_1$ le paramètre de relaxation du deuxième et troisième moment, et $s_2$ le paramètre de relaxation du dernier moment. 
+et on choisit comme équilibres des moments non conservés $m_i^\text{eq} (m_0) = \alpha_i m_0$, $\alpha_i \in \mathbb{R}$. On note $s_1$ le paramètre de relaxation des deuxième et troisième moments, et $s_2$ le paramètre de relaxation du dernier moment. 
 
 \begin{prop}\label{prop:consistance-D2Q4}
     Le $D_2Q_4$ est consistant avec l'équation de la chaleur ~\eqref{eq:chaleur-2d} si et seulement si le rapport $\Delta x^2/\Delta t = \mu > 0$ est constant, $\alpha_i = 0$ pour tout $i \in \{1,\ 2,\ 3\}$, $s_2 \neq 0$ et
@@ -113,14 +113,14 @@ $\impliedby$ Fixons $\mu = \Delta x^2/\Delta t$, $\alpha_i = 0$ pour $i = 1, 2, 
 \section{Ordre de consistance}
 
 \begin{prop}
-Il existe $0<s_2<2$ et $\mu > 0$ qui augmentent l'ordre de consistance du schéma. 
+Il existe $0<s_2<2$ et $\mu > 0$ qui augmentent l'ordre de consistance du schéma. (conjecture plutôt)
 \end{prop}
 
 \begin{proof}
 Soit $u \in \mathcal{C}^\infty(\mathbb{R}_+ \times \Omega)$ solution de \eqref{eq:chaleur-2d}. Pour $\mu > 0$, $s_1$ défini précédemment, $s_2$ > 0, et $\sigma = \left( \frac{1}{s_1} - \frac{1}{2} \right)$ on a
 \begin{multline*}
 s_1^2s_2 \Delta t \partial_t u = \Delta t \frac{\mu \sigma}{2} \Delta u + \frac{\Delta t^2}{2}\left( 2s_1^2 + s_1^2 s_2 + 4s_1s_2 \right) + \frac{\Delta x^4}{48} s_2(s_1^2-2s_1) (\partial_{xxxx}u + \partial_{yyyy} u) + \\
-\frac{\Delta t \Delta x^2}{4} (2s_1^2 - 4s_1 + s_1^2s_2 - 2s_2) (\partial_{txx} u + \partial_{tyy}u) + \frac{\Delta x^4}{4} (s_1^2 - 4s_1 + s_1s_2 - 2s_2) \partial_{xxyy} u
+\frac{\Delta t \Delta x^2}{4} (2s_1^2 - 4s_1 + s_1^2s_2 - 2s_2) (\partial_{txx} u + \partial_{tyy}u) + \frac{\Delta x^4}{4} (s_1^2 - 4s_1 + 4 + s_1s_2 - 2s_2) \partial_{xxyy} u
 \end{multline*}
 Comme $u$ est solution de \eqref{eq:chaleur-2d}, on a les égalités
 \begin{equation}
@@ -134,9 +134,15 @@ Comme $u$ est solution de \eqref{eq:chaleur-2d}, on a les égalités
 \end{equation}
 d'où
 \begin{multline*}
-    s_1^2s_2 \Delta t \partial_t u = \Delta t \frac{\mu \sigma}{2} \Delta u 
+    s_1^2s_2 \Delta t \partial_t u = \Delta t \frac{\mu \sigma}{2} \Delta u + \frac{\Delta t^2}{2}(2s_1^2 + s_1^2s_2 + 4s_1s_2) \nu^2 (\partial_{xxxx} u + 2 \partial_{xxyy} u + \partial_{yyyy} u ) + \frac{\Delta x^4}{48} s_2 (s_1^2 - s_1) ( \partial_{xxxx} u + \partial_{yyyy} u) \\
+    + \frac{\Delta t \Delta x^4}{4}(2s_1^2 - 4 s_1 + s_1^2 s_2 - 2s_2) \nu (\partial_{xxxx} u + \partial_{xxyy} u + \partial_{yyyy} u ) + \frac{\Delta x^4}{4} (s_1^2 - 4 s_1 + 4 + s_2 s_1 - 2s_2) \partial_{xxyy} u
 \end{multline*}
-\end{proof}
+et en écrivant $\Delta t = \Delta x^2/\mu$, on obtient
+\begin{multline*}
+    s_1^2s_2 \Delta t \partial_t u = \Delta t \frac{\mu \sigma}{2} \Delta u +  \Delta x^4 ( \partial_{xxxx} u + \partial_{yyyy} u ) \biggl(  \frac{1}{2} \frac{\nu^2}{\mu^2}(2s_1^2 + s_1^2 s_2 + 4s_1s_2) + \frac{1}{4}\frac{\nu}{\mu}(2s_1^2 -4s_1 + s_1^2s_2 - 2s_2) + \\\frac{1}{48}s_2(s_1^2-s_1)\biggl) + \Delta x^4 \partial_{xxyy} \biggl( \frac{1}{2}\frac{\nu^2}{\mu^2}(2s_1^2+s_1^2s_2 + s_1s_2) + \frac{1}{4}\frac{\nu}{\mu} (2s_1^2 - 4s_1 + s_1^2s_2 - 2s_2) + \frac{1}{4}(s_1^2 - 4s_1 + 4 + s_1s_2 - 2s_2)\biggl)
+\end{multline*}
+idée: premier coefficient polynôme en $X = \nu/\mu$ et deuxième coefficient linéaire en $s_2$, possible de s'en sortir? $s_1$ dépend implicitement de $\mu$ donc ça ne marche peut-être pas, quoique polynôme en $X = 1/\mu$?
+\end{proof} 
 
 
 
