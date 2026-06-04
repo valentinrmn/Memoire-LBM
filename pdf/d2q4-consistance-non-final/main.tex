@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{gensymb}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{array}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{stmaryrd}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary {decorations.pathreplacing} 
+\usepackage{multirow}
+\usepackage{lastpage}
+\usepackage{subfig}
+\usepackage{dirtytalk}
+
+\graphicspath{{images/}}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Mémoire M2}
+\chead{Consistance $D_1Q_4$ }
+\lhead{Valentin Roman}
+\rfoot{Page \thepage}
+
+\newtheorem{mydef}{Définition}
+\newtheorem{prop}{Proposition}
+\newtheorem{thrm}{Théorème}
+\newtheorem{lemme}{Lemme}
+\newtheorem{corollaire}{Corollaire}
+
+
+\begin{document}
+
+\section{Introduction}
+
+Soient $\Omega = [-1,1] \times [-1,1]$ et $u_0 \in L^2(\Omega)$. On introduit l'équation de la chaleur
+\begin{equation}
+    \begin{cases}
+        \partial_t u = \nu \Delta u, \ \ \forall t > 0, \ \forall (x,y) \in \Omega\\
+        u(0,x,y) = u_0(x,y), \ \ \forall (x,y) \in \Omega
+    \end{cases}
+    \label{eq:chaleur-2d}
+\end{equation}
+
+Soient $\Delta x > 0, \ \Delta y > 0, \ \Delta t > 0$ les pas spatials horizontaux et verticaux et le pas de temps. On considère le $D_2Q_4$ de la méthode de Boltzmann sur réseau avec les vitesses discrètes $c_0 = (1,0),\ c_1=(0,1),\ c_2=(-1,0),\ c_3=(0,-1)$. On ne considère qu'un moment conservé et on introduit la matrice de changement de base
+\[
+M =
+\begin{pmatrix}
+    1 & 1 & 1 & 1\\
+    1 & 0 & -1 & 0\\
+    0 & 1 & 0 & -1\\
+    1 & -1 & 1 & -1\\
+\end{pmatrix}
+\]
+et on choisit comme équilibres des moments non conservés $m_i^\text{eq} (m_0) = \alpha_i m_0$, $\alpha_i \in \mathbb{R}$. On note $s_1$ le paramètre de relaxation du deuxième et troisième moment, et $s_2$ le paramètre de relaxation du dernier moment. 
+
+\begin{prop}\label{prop:consistance-D2Q4}
+    Le $D_2Q_4$ est consistant avec l'équation de la chaleur ~\eqref{eq:chaleur-2d} si et seulement si le rapport $\Delta x^2/\Delta t = \mu > 0$ est constant, $\alpha_i = 0$ pour tout $i \in \{1,\ 2,\ 3\}$, $s_2 \neq 0$ et
+    \[
+    s_1 = \frac{2\mu}{\mu + 4\nu}
+    \] 
+\end{prop}
+
+\begin{proof}
+$\implies$ Soit $u \in \mathcal{C}^\infty (\mathbb{R}_+ \times \Omega)$ solution de ~\eqref{eq:chaleur-2d}. Le schéma multi-pas aux différences finies équivalent au $D_2Q_4$ appliqué à $u$ s'écrit
+
+\begin{multline*}
+0 = u_{i,j}^{n+1} + \alpha_1 s_1 \frac{u_{i+1,j}^n-u_{i-1,j}^n}{2} + \alpha_2 s_1 \frac{u_{i,j+1}^n-u_{i,j-1}^n}{2} + \alpha_3 s_2 \frac{u_{i,j-1}^n + u_{i,j+1}^n - u_{i-1,j}^n - u_{i+1,j}^n}{4}\\
++ \left(s_1 + \frac12 s_2 - 2\right) \frac{u_{i-1,j}^n+u_{i+1,j}^n+u_{i,j-1}^n+u_{i,j+1}^n}{2} + \alpha_1 s_1 (s_1 + s_2 - 1) \frac{u_{i+1, j-1}^{n-1}-u_{i-1,j-1}^{n-1}-u_{i-1,j+1}^{n-1}+u_{i+1,j+1}^{n-1}}{4}\\
++ \alpha_2 s_1(s_1 + s_2 - 1) \frac{u_{i-1,j+1}^{n-1} - u_{i-1,j-1}^{n-1} - u_{i+1,j-1}^{n-1}+u_{i+1,j+1}^{n-1}}{4} + \left(1-s_1-\frac{1}{2}s_2 + \frac{s_1^2 + s_1s_2}{4}\right) (u_{i-1,j-1}^{n-1}+u_{i+1,j-1}^{n-1} \\ + u_{i-1,j+1}^{n-1}+u_{i+1,j+1}^{n-1}) + \left(s_1s_2 -2 s_1 - s_2 + 2\right) u_{i,j}^{n-1} + \alpha_1 s_1 (s_1s_2 - s_1 - s_2 + 1) \frac{u_{i+1,j}^{n-2}+u_{i-1,j}^{n-2}}{2} + \\
+\alpha_2 s_1 (s_1s_2 - s_1 - s_2 + 1) \frac{u_{i,j+1}^{n-2}-u_{i,j-1}^{n-2}}{2}
++ \alpha_3 s_2 (s_1^2 - s_1 + 1) \frac{u_{i-1,j}^{n-2}+u_{i+1,j}^{n-2}-u_{i,j-1}^{n-2}-u_{i,j+1}^{n-2}}{4} \\
++ \left(-1 + \frac{3}{2}s_1 + \frac{3}{4}s_2 - \frac{1}{2}s_1^2 - s_1s_2 + \frac{1}{4}s_1^2s_2\right) (u_{i-1,j}^{n-2}+u_{i+1,j}^{n-2}+u_{i,j-1}^{n-2}+u_{i,j+1}^{n-2}) + (1-s_1)^2(1-s_2) u_{i,j}^{n-3}.
+\end{multline*}
+En injectant des développements de Taylor centrés autour de $u_{i,j}^n = u(t^n, x_i, y_j)$, on obtient comme équation équivalente
+\begin{multline*}
+    0 = s_1^2s_2 \Delta t \partial_t u + \alpha_1 s_1^2s_2 \Delta x \partial_x u + \alpha_2s_1^2s_2 \Delta y \partial_y u + (\alpha_3 + 1)s_1s_2(s_1-2) \frac{\Delta x^2}{4} \partial_{xx} u - (\alpha_3 - 1) s_1s_2(s_1-2)\frac{\Delta y^2}{4} \partial_{yy} u \\
+    + \alpha_1 s_1(s_1 + s_1s_2 + s_2) \Delta x \Delta t \partial_{tx} u + \alpha_2 s_1 (s_1 + s_1s_2 + s_1) \Delta y \Delta t \partial_{ty} u + O(\Delta t^2, \Delta x^3, \Delta y^3).
+\end{multline*}
+Afin d'obtenir \eqref{eq:chaleur-2d}, il est nécessaire de poser $\alpha_1 = \alpha_2 = 0$ pour ne pas obtenir de termes de transport et de termes croisés $\Delta x \Delta t, \ \Delta y \Delta t$. De même, $\alpha_3 = 0$ nous permet d'obtenir pour les termes spatiaux d'ordre 2
+\[
+\frac{1}{4}s_1s_2(s_1-2)\left( \Delta x^2 \partial_{xx} u + \Delta y^2 \partial_{yy} u \right),
+\] 
+qui correspond au Laplacien pondéré par les pas d'espace. En imposant $\Delta x = \Delta y$, nous obtenons
+\[
+0 = s_1^2 s_2 \Delta t \partial_t u + s_1s_2(s_1-2)\frac{\Delta x^2}{4} \Delta u + O(\Delta t^2, \Delta x^3)
+\]
+\[
+\implies 0 = \partial_t u + \frac{1}{4}\left( 1 - \frac{2}{s_1}\right) \frac{\Delta x^2}{\Delta t} \Delta u + O(\Delta t^2, \Delta x^3).
+\]
+Afin d'obtenir comme équation équivalente \eqref{eq:chaleur-2d}, il faut que le coefficient devant $\Delta u$ corresponde au coefficient de diffusivité $-\nu$ de l'équation de la chaleur. Ainsi on a
+\begin{align*}
+    \frac{1}{4}\left( 1 - \frac{2}{s_1}\right) \frac{\Delta x^2}{\Delta t} = -\nu \iff s_1 = \frac{2}{1 + 4 \frac{\nu}{\mu}} = \frac{2\mu}{\mu + 4 \nu}
+\end{align*}
+Si $s_2 = 0$, alors les développements de Taylor précédamment réalisés donnent
+\[
+0 = \alpha_1 s_1^2 \Delta x \Delta t \partial_{tx} u + \alpha_2 s_1^2 \Delta y \Delta t \partial_{ty} u + O(\Delta t^2, \Delta x^3, \Delta y^3)
+\]
+et il n'est pas possible d'obtenir l'équation \eqref{eq:chaleur-2d} comme équation équivalente.
+
+$\impliedby$ Fixons $\mu = \Delta x^2/\Delta t$, $\alpha_i = 0$ pour $i = 1, 2, 3$, $s_1 = \frac{2\mu}{\mu + 4 \nu} $ et $s_2 \neq 0$. Un calcul direct et similaire à ce qui a été fait précédemment donne $\tau_{i,j}^n = O(\Delta t + \Delta x^2)$.
+\end{proof}
+
+\section{Ordre de consistance}
+
+\begin{prop}
+Il existe $0<s_2<2$ et $\mu > 0$ qui augmentent l'ordre de consistance du schéma. 
+\end{prop}
+
+\begin{proof}
+Soit $u \in \mathcal{C}^\infty(\mathbb{R}_+ \times \Omega)$ solution de \eqref{eq:chaleur-2d}. Pour $\mu > 0$, $s_1$ défini précédemment, $s_2$ > 0, et $\sigma = \left( \frac{1}{s_1} - \frac{1}{2} \right)$ on a
+\begin{multline*}
+s_1^2s_2 \Delta t \partial_t u = \Delta t \frac{\mu \sigma}{2} \Delta u + \frac{\Delta t^2}{2}\left( 2s_1^2 + s_1^2 s_2 + 4s_1s_2 \right) + \frac{\Delta x^4}{48} s_2(s_1^2-2s_1) (\partial_{xxxx}u + \partial_{yyyy} u) + \\
+\frac{\Delta t \Delta x^2}{4} (2s_1^2 - 4s_1 + s_1^2s_2 - 2s_2) (\partial_{txx} u + \partial_{tyy}u) + \frac{\Delta x^4}{4} (s_1^2 - 4s_1 + s_1s_2 - 2s_2) \partial_{xxyy} u
+\end{multline*}
+Comme $u$ est solution de \eqref{eq:chaleur-2d}, on a les égalités
+\begin{equation}
+    \partial_{tt} u = \nu^2 \left( \partial_{xxxx}u + 2 \partial_{xxyy} u + \partial_{yyyy} u\right)
+\end{equation}
+\begin{equation}
+    \partial_{txx} u = \nu \left(  \partial_{xxxx} u + \partial_{xxyy} u \right)
+\end{equation}
+\begin{equation}
+    \partial_{tyy} u = \nu \left(  \partial_{yyyy} u + \partial_{xxyy} u \right)
+\end{equation}
+d'où
+\begin{multline*}
+    s_1^2s_2 \Delta t \partial_t u = \Delta t \frac{\mu \sigma}{2} \Delta u 
+\end{multline*}
+\end{proof}
+
+
+
+\end{document}
