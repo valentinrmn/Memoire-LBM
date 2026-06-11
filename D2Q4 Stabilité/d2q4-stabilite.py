@@ -12,10 +12,10 @@ def rayon_spectral(xi_x, xi_y, mu, s2):
     s1 = 2*mu/(mu + 4*nu)
     i = complex(0,1)
     Amp = np.array([
-        [.5*(np.cos(xi_x) + np.cos(xi_y)), (1-i*s1)*np.sin(xi_x), (1-i*s1)*np.sin(xi_y), -0.5*(1-s2)*(np.cos(xi_x) - np.cos(xi_y))],
+        [.5*(np.cos(xi_x) + np.cos(xi_y)), i*(1-s1)*np.sin(xi_x), i*(1-s1)*np.sin(xi_y), .5*(1-s2)*(np.cos(xi_x) - np.cos(xi_y))],
         [.5*i*np.sin(xi_x), (1-s1)*np.cos(xi_x), 0, 0.5*i*(1-s2)*np.sin(xi_x)],
         [0.5*i*np.sin(xi_y), 0, (1-s1)*np.cos(xi_y), 0.5*i*(1-s2)*np.sin(xi_y)],
-        [.5 * (np.cos(xi_x) - np.cos(xi_y)), i*(1-s1)*np.sin(xi_x), i*(1-s1)*np.sin(xi_y), .5*(1-s2)*(np.cos(xi_x) + np.cos(xi_y))]])
+        [.5 * (np.cos(xi_x) - np.cos(xi_y)), i*(1-s1)*np.sin(xi_x), i*(s1-1)*np.sin(xi_y), .5*(1-s2)*(np.cos(xi_x) + np.cos(xi_y))]])
     return max(np.abs(np.linalg.eigvals(Amp)))
 
 
@@ -30,7 +30,7 @@ for i, xi_x in enumerate(xi):
     for j, xi_y in enumerate(xi):
         RS[i,j] = rayon_spectral(xi_x, xi_y, mu_init, s2_init)
 
-numerotation = [-np.pi, -np.pi/2, 0, np.pi/2, np.pi]
+frequences_axes = [-np.pi, -np.pi/2, 0, np.pi/2, np.pi]
 labels = ['$-\\pi$', '$-\\pi/2$', '$0$', '$\\pi/2$', '$\\pi$']
 
 fig, ax = plt.subplots(figsize=(9,7))
@@ -39,9 +39,9 @@ plt.subplots_adjust(bottom=0.15)
 mesh = ax.pcolormesh(xi, xi, RS, cmap='viridis')
 plt.colorbar(mesh, ax=ax, label='Rayon spectral')
 
-ax.set_xticks(numerotation)
+ax.set_xticks(frequences_axes)
 ax.set_xticklabels(labels)
-ax.set_yticks(numerotation)
+ax.set_yticks(frequences_axes)
 ax.set_yticklabels(labels)
 
 ax.set_xlabel('$\\xi_x$')
