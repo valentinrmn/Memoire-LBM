@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 
-comparaison_diffusion = True
+comparaison_diffusion = False
 comp_visuelle_erreur = True
 
 # ---------------------------------------------------------
@@ -149,7 +149,7 @@ if comp_visuelle_erreur:
 
     Nx, Ny = 128, 128
     T = 1.
-    s2 = 1.
+    s2 = 2.5
 
     BC = 'périodique'
 
