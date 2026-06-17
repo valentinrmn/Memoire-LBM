@@ -90,7 +90,7 @@ Afin d'obtenir \eqref{eq:chaleur-2d}, il est nécessaire de poser $\alpha_1 = \a
 \[
 \frac{1}{4}s_1s_2(s_1-2)\left( \Delta x^2 \partial_{xx} u + \Delta y^2 \partial_{yy} u \right),
 \] 
-qui correspond au Laplacien pondéré par les pas d'espace. En imposant $\Delta x = \Delta y$, nous obtenons
+qui correspond au Laplacien pondéré par les pas d'espace. En imposant $\Delta x = \Delta y$ et $s_1, s_2 \neq 0$, nous obtenons
 \[
 0 = s_1^2 s_2 \Delta t \partial_t u + s_1s_2(s_1-2)\frac{\Delta x^2}{4} \Delta u + O(\Delta t^2, \Delta x^3)
 \]
@@ -99,7 +99,7 @@ qui correspond au Laplacien pondéré par les pas d'espace. En imposant $\Delta 
 \]
 Afin d'obtenir comme équation équivalente \eqref{eq:chaleur-2d}, il faut que le coefficient devant $\Delta u$ corresponde au coefficient de diffusivité $-\nu$ de l'équation de la chaleur. Ainsi on a
 \begin{align*}
-    \frac{1}{4}\left( 1 - \frac{2}{s_1}\right) \frac{\Delta x^2}{\Delta t} = -\nu \iff \mu = \frac{4\nu s_1}{2-s_1}%s_1 = \frac{2}{1 + 4 \frac{\nu}{\mu}} = \frac{2\mu}{\mu + 4 \nu}
+    \frac{1}{4}\left( 1 - \frac{2}{s_1}\right) \frac{\Delta x^2}{\Delta t} = -\nu \iff \mu := \frac{\Delta x^2}{\Delta t} = \frac{4\nu s_1}{2-s_1}%s_1 = \frac{2}{1 + 4 \frac{\nu}{\mu}} = \frac{2\mu}{\mu + 4 \nu}
 \end{align*}
 Si $s_2 = 0$, alors les développements de Taylor précédamment réalisés donnent
 \[
@@ -135,7 +135,7 @@ Comme $u$ est solution de \eqref{eq:chaleur-2d}, on a les égalités
 d'où
 \begin{multline*}
     s_1^2s_2 \Delta t \partial_t u = \Delta t \frac{\mu \sigma}{2} \Delta u + \frac{\Delta t^2}{2}(2s_1^2 + s_1^2s_2 + 4s_1s_2) \nu^2 (\partial_{xxxx} u + 2 \partial_{xxyy} u + \partial_{yyyy} u ) + \frac{\Delta x^4}{48} s_2 (s_1^2 - s_1) ( \partial_{xxxx} u + \partial_{yyyy} u) \\
-    + \frac{\Delta t \Delta x^4}{4}(2s_1^2 - 4 s_1 + s_1^2 s_2 - 2s_2) \nu (\partial_{xxxx} u + \partial_{xxyy} u + \partial_{yyyy} u ) + \frac{\Delta x^4}{4} (s_1^2 - 4 s_1 + 4 + s_2 s_1 - 2s_2) \partial_{xxyy} u
+    + \frac{\Delta t \Delta x^4}{4}(2s_1^2 - 4 s_1 + s_1^2 s_2 - 2s_2) \nu (\partial_{xxxx} u + 2\partial_{xxyy} u + \partial_{yyyy} u ) + \frac{\Delta x^4}{4} (s_1^2 - 4 s_1 + 4 + s_2 s_1 - 2s_2) \partial_{xxyy} u
 \end{multline*}
 et en écrivant $\Delta t = \Delta x^2/\mu$, on obtient
 \begin{multline*}
