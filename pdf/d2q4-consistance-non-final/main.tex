@@ -64,9 +64,9 @@ M =
 et on choisit comme équilibres des moments non conservés $m_i^\text{eq} (m_0) = \alpha_i m_0$, $\alpha_i \in \mathbb{R}$. On note $s_1$ le paramètre de relaxation des deuxième et troisième moments, et $s_2$ le paramètre de relaxation du dernier moment. 
 
 \begin{prop}\label{prop:consistance-D2Q4}
-    Le $D_2Q_4$ est consistant avec l'équation de la chaleur ~\eqref{eq:chaleur-2d} si et seulement si le rapport $\Delta x^2/\Delta t = \mu > 0$ est constant, $\alpha_i = 0$ pour tout $i \in \{1,\ 2,\ 3\}$, $s_2 \neq 0$ et
+    Le $D_2Q_4$ est consistant avec l'équation de la chaleur \eqref{eq:chaleur-2d} si et seulement si $s_1 \notin \{ 0, 2 \}$, $s_2 \neq 0$, $\alpha_i = 0$ pour tout $i \in \{1,\ 2,\ 3\}$ et
     \[
-    s_1 = \frac{2\mu}{\mu + 4\nu}
+    \frac{\Delta x^2}{\Delta t} := \mu = \frac{4\nu s_1}{2-s_1}%s_1 = \frac{2\mu}{\mu + 4\nu}
     \] 
 \end{prop}
 
@@ -99,7 +99,7 @@ qui correspond au Laplacien pondéré par les pas d'espace. En imposant $\Delta 
 \]
 Afin d'obtenir comme équation équivalente \eqref{eq:chaleur-2d}, il faut que le coefficient devant $\Delta u$ corresponde au coefficient de diffusivité $-\nu$ de l'équation de la chaleur. Ainsi on a
 \begin{align*}
-    \frac{1}{4}\left( 1 - \frac{2}{s_1}\right) \frac{\Delta x^2}{\Delta t} = -\nu \iff s_1 = \frac{2}{1 + 4 \frac{\nu}{\mu}} = \frac{2\mu}{\mu + 4 \nu}
+    \frac{1}{4}\left( 1 - \frac{2}{s_1}\right) \frac{\Delta x^2}{\Delta t} = -\nu \iff \mu = \frac{4\nu s_1}{2-s_1}%s_1 = \frac{2}{1 + 4 \frac{\nu}{\mu}} = \frac{2\mu}{\mu + 4 \nu}
 \end{align*}
 Si $s_2 = 0$, alors les développements de Taylor précédamment réalisés donnent
 \[
@@ -107,7 +107,7 @@ Si $s_2 = 0$, alors les développements de Taylor précédamment réalisés donn
 \]
 et il n'est pas possible d'obtenir l'équation \eqref{eq:chaleur-2d} comme équation équivalente.
 
-$\impliedby$ Fixons $\mu = \Delta x^2/\Delta t$, $\alpha_i = 0$ pour $i = 1, 2, 3$, $s_1 = \frac{2\mu}{\mu + 4 \nu} $ et $s_2 \neq 0$. Un calcul direct et similaire à ce qui a été fait précédemment donne $\tau_{i,j}^n = O(\Delta t + \Delta x^2)$.
+$\impliedby$ Fixons $\mu = \Delta x^2/\Delta t = \frac{4\nu s_1}{2-s_1}$, $\alpha_i = 0$ pour $i = 1, 2, 3$, $s_1 \notin \{0, 2\}$ et $s_2 \neq 0$. Un calcul direct et similaire à ce qui a été fait précédemment donne $\tau_{i,j}^n = O(\Delta t + \Delta x^2)$.
 \end{proof}
 
 \section{Ordre de consistance}

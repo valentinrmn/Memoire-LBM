@@ -19,8 +19,8 @@ def rayon_spectral(xi_x, xi_y, mu, s2):
     return max(np.abs(np.linalg.eigvals(Amp)))
 
 
-def rayon_spectral2(kx, ky, mu, s2):
-    s1 = 2*mu/(mu + 4**nu)
+def rayon_spectral2(kx, ky, s1, s2):
+    # s1 = 2*mu/(mu + 4**nu)
     i = complex(0,1)
     Amp = np.array([
         [1/2*np.cos(kx) + 1/2*np.cos(ky), -i*s1*np.sin(kx) + i*np.sin(kx), -i*s1*np.sin(ky) + i*np.sin(ky), -1/2*s2*(np.cos(kx) - np.cos(ky)) + 1/2*np.cos(kx) - 1/2*np.cos(ky)],
@@ -31,7 +31,7 @@ def rayon_spectral2(kx, ky, mu, s2):
     return max(np.abs(np.linalg.eigvals(Amp)))
 
 
-mu_init = 1.
+s1_init = 1.
 s2_init = 1.
 
 N_xi = 100
@@ -40,7 +40,7 @@ RS = np.zeros((N_xi, N_xi))
 
 for i, xi_x in enumerate(xi):
     for j, xi_y in enumerate(xi):
-        RS[i,j] = rayon_spectral2(xi_x, xi_y, mu_init, s2_init)
+        RS[i,j] = rayon_spectral2(xi_x, xi_y, s1_init, s2_init)
 
 frequences_axes = [-np.pi, -np.pi/2, 0, np.pi/2, np.pi]
 labels = ['$-\\pi$', '$-\\pi/2$', '$0$', '$\\pi/2$', '$\\pi$']
@@ -60,20 +60,20 @@ ax.set_xlabel('$\\xi_x$')
 ax.set_ylabel('$\\xi_y$')
 
 ax_s2 = plt.axes( (0.2, 0.05, 0.6, 0.03))
-ax_mu = plt.axes((0.2, 0.02, 0.6, 0.03))
+ax_s1 = plt.axes((0.2, 0.02, 0.6, 0.03))
 slider_s2 = Slider(ax_s2, '$s_2$', -1., 3., valinit=s2_init, valstep=0.05)
-slider_mu = Slider(ax_mu, '$\\mu$', 0.1, 10., valinit=mu_init, valstep=0.05)
+slider_s1 = Slider(ax_s1, '$s_1$', -1., 3., valinit=s1_init, valstep=0.05)
 
 def update(val):
     s2 = slider_s2.val
-    mu = slider_mu.val
+    s1 = slider_s1.val
     for i, xi_x in enumerate(xi):
         for j, xi_y in enumerate(xi):
-            RS[i,j] = rayon_spectral2(xi_x, xi_y, mu, s2)
+            RS[i,j] = rayon_spectral2(xi_x, xi_y, s1, s2)
     mesh.set_array(RS.ravel())
     mesh.set_clim(RS.min(), RS.max())
     fig.canvas.draw_idle()
 
 slider_s2.on_changed(update)
-slider_mu.on_changed(update)
+slider_s1.on_changed(update)
 plt.show()

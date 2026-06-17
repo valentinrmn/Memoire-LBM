@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 
-comparaison_diffusion = False
+comparaison_diffusion = True
 comp_visuelle_erreur = True
 
 # ---------------------------------------------------------
@@ -18,6 +18,7 @@ nu = 1e-1
 
 def uex(t, x, y, k=1, l=1):
     return np.sin(k*np.pi*x)*np.sin(l*np.pi*y)*np.exp(-(k**2+l**2)*np.pi**2*nu*t)
+    # return (x**2 + y**2) < 0.25
 
 def m1eq(m0, a1=0):
     return a1*m0
@@ -62,23 +63,20 @@ def bord_transport(fstar, type='périodique'):
     return f_new
 
 
-def simulation(s2, Nx, Ny, T, BC='dirichlet', sauvegarde=False, Ncomp=10):
+def simulation(s1, s2, Nx, Ny, T, BC='dirichlet', sauvegarde=False, Ncomp=10):
 
-    mu = 1.5
 
     dx = (xmax-xmin)/(Nx)
     dy = (ymax-ymin)/(Ny)
     x = np.linspace(xmin, xmax, Nx).reshape(-1, 1)
     y = np.linspace(ymin, ymax, Ny).reshape(1, -1)
-    # zeros((Nx, Ny)) pour initialiser: éviter meshgrid
 
-    # la = mu/dx
+    mu = 4*nu*s1/(2-s1)
+
     dt = dx*dx/mu
     Nt = int(T/dt)
     nt_discret_comp = np.linspace(1, Nt, Ncomp, dtype=int)
     t_list = []
-
-    s1 = 2 / (1 + 4*nu/mu)
 
     # Initialisation
     t = 0
@@ -123,11 +121,14 @@ if comparaison_diffusion:
     Nx, Ny = 128, 128
     T = 1.
 
+    s1 = 1.
+    s2 = 1.
+
     BC = 'périodique'
 
     Ncomp = 50
     
-    dt, t_f, x, y, m0, sauvegardes, t_list = simulation(1., Nx, Ny, T, BC, True, Ncomp)
+    dt, t_f, x, y, m0, sauvegardes, t_list = simulation(s1, s2, Nx, Ny, T, BC, True, Ncomp)
     L = len(sauvegardes)
     max_ex = np.zeros(L)
     max_appr = np.zeros(L)
@@ -149,24 +150,24 @@ if comp_visuelle_erreur:
 
     Nx, Ny = 128, 128
     T = 1.
-    s2 = 2.5
+    s1 = 1.95
+    s2 = 1.95
 
     BC = 'périodique'
 
     t0 = time.time()
-    dt, t, x, y, u_appr = simulation(s2, Nx, Ny, T, BC, False)
+    dt, t, x, y, u_appr = simulation(s1, s2, Nx, Ny, T, BC, False)
     t1 = time.time()
     data = pd.DataFrame({'Nx' : [Nx], \
                          'Ny' : [Ny], \
                          'Temps (s)' : [round(t1-t0, 2)], \
+                         's1' : [s1], \
                          's2' : [s2]})
     print(data)
     
     X, Y = np.meshgrid(x, y, indexing='ij')
     u_init = uex(0, X, Y)
     u_ex = uex(t, X, Y)
-    print("x =", x, "\n")
-    print("y =", y)
 
     fig, ax = plt.subplots(2, 2, figsize=(9,7))
     pcm1 = ax[0,0].pcolor(X, Y, u_init, cmap=cmap)
