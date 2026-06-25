@@ -35,7 +35,6 @@ def bord_transport(fstar, type='périodique'):
     Conditions de bord (à spécifier) + Transport
     """
     f_new = np.zeros_like(fstar)
-
     if type == 'dirichlet':
         f_new[0, 0, :] = fstar[-2, 2, :]
         f_new[:, 3, -1] = fstar[:, 1, 1]
@@ -46,6 +45,7 @@ def bord_transport(fstar, type='périodique'):
         f_new[:, 3, -1] = fstar[:, 3, 1]
         f_new[-1, 2, :] = fstar[1, 2, :]
         f_new[:, 1, 0] = fstar[:, 1, -2]
+
     
     # Transport
     f_new[1:, 0, :] = fstar[:-1, 0, :]
@@ -60,8 +60,8 @@ def simulation(s1, s2, Nx, Ny, T, BC='dirichlet'):
 
     dx = (xmax-xmin)/(Nx)
     dy = (ymax-ymin)/(Ny)
-    x = np.linspace(xmin, xmax, Nx).reshape(-1, 1)
-    y = np.linspace(ymin, ymax, Ny).reshape(1, -1)
+    x = np.linspace(xmin, xmax-dx, Nx).reshape(-1, 1)
+    y = np.linspace(ymin, ymax-dy, Ny).reshape(1, -1)
 
     mu = 4*nu*s1/(2-s1)
 
@@ -102,36 +102,39 @@ def simulation(s1, s2, Nx, Ny, T, BC='dirichlet'):
     return dt, t, x[:, 0], y[0, :], m[:, 0,:]
 
 
-mu_list = np.linspace(1, 20, 8)#np.array([1, .5, 2, 3.2])
-Nx_list = np.array([16, 32, 64, 128])
+
+Nx_list = np.array([16, 32, 64, 128, 256])
 dx_list = (xmax-xmin)/Nx_list
 
-mu_list = np.sort(mu_list)
 Nx_list = np.sort(Nx_list)
 dx_list = np.sort(dx_list)
 
-err = np.zeros((mu_list.size, Nx_list.size))
 
 BC = 'périodique'
-T = 0.1
-s1 = 1.9
-s2_opt = 2*(s1**2 -2*s1)/(s1**2-6*s1+4)
-s2_list = [1., s2_opt]
+T = 0.5
+s1 = -np.sqrt(3) + 3
+s2_opt = -6*(s1**2 -2*s1)/(s1**2-6*s1+12)
+s2_list = np.array([1., s2_opt])
+print(f's1 = {s1}, s2_opt = {s2_opt}')
+
+err = np.zeros((s2_list.size, Nx_list.size))
 
 for k, s2 in enumerate(s2_list):
     for l, Nx in enumerate(Nx_list):
         dx = dx_list[l]
         dt, t, x, y, m0 = simulation(s1, s2, Nx, Nx, T, BC)
         u_ex = uex(t, x, y)
-
         err[k, l] = np.sqrt( dx*dx*np.sum((m0 - u_ex)**2) )
+
+
 
 fig2, ax2 = plt.subplots(figsize=(9,7))
 for k, s2 in enumerate(s2_list):
-    if s2 == s2_opt:
-        ax2.plot(dx_list, err[k, :], '-o', label=f'$s_2=s_2^*$')
-    else:
-        ax2.plot(dx_list, err[k, :], '-o', label=f'$s_2=${s2}')
+    ax2.plot(dx_list, err[k, :], '-o', label=f'$s_2=${s2}')
+    # if s2 == s2_opt:
+    #     ax2.plot(dx_list, err[k, :], '-o', label=f'$s_2=s_2^*$')
+    # else:
+    #     ax2.plot(dx_list, err[k, :], '-o', label=f'$s_2=${s2}')
 ax2.plot(dx_list, dx_list, '--', label='$O(\\Delta x)$', c='crimson')
 ax2.plot(dx_list, dx_list**2, '--', label='$O(\\Delta x^2)$', c='black')
 ax2.legend()
@@ -139,7 +142,3 @@ ax2.loglog()
 ax2.set_xlabel('$\\Delta x$')
 ax2.set_ylabel('Erreur $L^2$')
 plt.show()
-
-
-
-

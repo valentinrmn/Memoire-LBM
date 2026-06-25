@@ -2,12 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
-# ------------------------------------
-# Différence avec d2q4-stabilite-polaire.py :
-#  ici on définit mu en fonction de s1, contrairement à s1 en fonction de mu
-#  ça permet de voir la condition de stabilité 0 < s1 < 2, 0 < s2 < 2 plus facilement
-# ------------------------------------
-
 
 nu = 1e-1
 def rayon_spectral_polaire(xi, theta, s1, s2):
@@ -35,7 +29,7 @@ N_xi = 100
 xi_list = np.linspace(-np.pi, np.pi, N_xi)
 
 angles = [0, np.pi/4, np.pi/2]
-angles_labels = ['$0$', '$\\pi/4$', '$\\pi/2$', '$\\pi$']
+angles_labels = ['$0$', '$\\pi/4$', '$\\pi/2$']
 
 # pour le plot à la fin
 frequences_axes = [-np.pi, -np.pi/2, 0, np.pi/2, np.pi]

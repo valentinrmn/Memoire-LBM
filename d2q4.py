@@ -149,10 +149,9 @@ if comp_visuelle_erreur:
     cmap = 'viridis'
 
     Nx, Ny = 128, 128
-    T = 1.
+    T = 0.5
     s1 = 1.95
-    s2 = 4*(s1**3 + 5*s1**2 + 4) / (s1**3 - 9*s1**2 + 12*s1 + 4)
-    print(s2)
+    s2 = 2*(s1**2 -2*s1)/(s1**2-6*s1+4)
 
     BC = 'périodique'
 

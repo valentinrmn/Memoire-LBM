@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 def s2(s1):
-    return 2*(s1**2-2*s1)/(s1**2 -6*s1+4)
+    return -6*(s1**2-2*s1)/(s1**2 -6*s1+12)
 
 s1 = np.linspace(-0.1, 2.1, 200)
 s2_im = s2(s1)
@@ -16,6 +16,5 @@ ax.set_ylim([-0.5, 2.5])
 ax.set_xlim([0, 2])
 ax.axhline(2, linestyle='--', color='red')
 ax.axhline(0, linestyle='--', color='red')
-ax.axvline(1, linestyle='--', color='purple', label='$s_1=1$')
 plt.show()
 
